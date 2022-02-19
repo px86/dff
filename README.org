@@ -3,3 +3,19 @@
 #+AUTHOR: px86@protonmail.com
 
 Recursively finds and lists duplicate files in a given directory.
+
+* Usage
+
+run =dff --help= to see usage
+
+#+begin_src shell
+  Usage: dff [OPTIONS] <rootdir>
+  <rootdir>           directory to be searched recursively
+
+  Options:
+    --help            Print this help message
+#+end_src
+
+* Notes
+
+- [[https://github.com/px86/sha-256][sha-256]] implementation in C++
