@@ -1,0 +1,5 @@
+*.o
+dff
+*~
+todo
+.clangd

@@ -1,0 +1,5 @@
+#+TITLE: DFF - duplicate files finder
+#+AUTHOR: Pushkar Raj
+#+AUTHOR: px86@protonmail.com
+
+Recursively finds and lists duplicate files in a given directory.
