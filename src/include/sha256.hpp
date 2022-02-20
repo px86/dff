@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <optional>
 
 class sha256sum {
 public:
@@ -21,7 +22,7 @@ private:
 
   std::uint64_t m_cummulative_bitlen = 0;
 
-  void update_md();
+  void update_md() noexcept;
 
   std::array<std::uint32_t, 8> md = {
       0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
@@ -45,4 +46,4 @@ private:
           0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
 };
 
-auto hash_file(const char *filepath) -> std::string;
+auto sha256_hash_file(const char *filepath) -> std::optional<std::string>;
