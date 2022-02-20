@@ -14,6 +14,7 @@ run =dff --help= to see usage
 
   Options:
     --help            Print this help message
+    --follow-sym      follow symbolic links
 #+end_src
 
 * Notes
