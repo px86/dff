@@ -1,6 +1,8 @@
 #include "include/sha256.hpp"
 
 #include <array>
+#include <ios>
+#include <optional>
 #include <endian.h>
 #include <fstream>
 #include <iomanip>
@@ -76,7 +78,7 @@ auto sha256sum::get_str() -> std::string
   return ss.str();
 }
 
-void sha256sum::update_md()
+void sha256sum::update_md() noexcept
 {
   for (int i = 0; i < 16; ++i)
     w[i] = htobe32(*(std::uint32_t *)&m_block[i * 4]);
@@ -122,23 +124,28 @@ void sha256sum::update_md()
   md[7] += h;
 }
 
-auto hash_file(const char *filepath) -> std::string
+auto sha256_hash_file(const char *filepath) -> std::optional<std::string>
 {
-  auto file = std::ifstream(filepath, std::ifstream::binary);
-  if (!file) {
-    std::cerr << "Error: failed to open file -> " << filepath << std::endl;
-    std::exit(EXIT_FAILURE);
+  try {
+    auto file = std::ifstream(filepath, std::ifstream::binary);
+    file.exceptions(std::ifstream::badbit);
+
+    constexpr size_t buff_size = 4096;
+    char buffer[buff_size];
+
+    sha256sum ssum;
+
+    while (file) {
+      file.read(buffer, 4096);
+      ssum.feed(buffer, file.gcount());
+    }
+
+    return { ssum.get_str() };
+  } catch (const std::ios_base::failure &fail) {
+    std::cerr << "\x1b[31m" << "Error: file "
+	      << filepath << " can not be opened : "
+	      << fail.what() << "\x1b[m\n";
   }
 
-  constexpr size_t buff_size = 4096;
-  char buffer[buff_size];
-
-  sha256sum s;
-
-  while (file) {
-    file.read(buffer, 4096);
-    s.feed(buffer, file.gcount());
-  }
-
-  return s.get_str();
+  return {};
 }
