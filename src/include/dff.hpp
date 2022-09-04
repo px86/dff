@@ -18,7 +18,7 @@ public:
   Record() = default;
   Record(Record &&rec);
   auto size() const -> std::size_t;
-  void insert(fs::path path);
+  void insert(const fs::path& path);
   auto begin() const -> std::forward_list<fs::path>::const_iterator;
   auto end() const -> std::forward_list<fs::path>::const_iterator;
 

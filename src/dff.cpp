@@ -16,7 +16,7 @@ Record::Record(Record &&rec)
 
 auto Record::size() const -> std::size_t { return m_size; }
 
-void Record::insert(fs::path path)
+void Record::insert(const fs::path& path)
 {
   m_files.push_front(path);
   ++m_size;
