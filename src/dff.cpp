@@ -1,4 +1,5 @@
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <thread>
 #include <mutex>
@@ -122,6 +123,23 @@ void dff::print_dups() noexcept
       for (const auto &path : rec)
         std::cout << path << '\n';
       std::cout << "\x1b[m\n";
+    }
+  }
+}
+
+auto dff::export_dups(const char *filename) -> void
+{
+  auto outfile = std::ofstream(filename);
+  if (!outfile.is_open()) {
+    std::cerr << "Error: can not open file " << filename << std::endl;
+    std::exit(1);
+  }
+
+  for (const auto &[_, record] : m_store) {
+    if (record.size() > 1) {
+      for (const auto &path : record)
+        outfile << fs::canonical(path) << ',';
+      outfile << '\n';
     }
   }
 }

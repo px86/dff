@@ -42,8 +42,9 @@ public:
   dff() = delete;
   dff(const dff&) = delete;
   dff(const char *rootdir, bool follow_symlinks);
-  auto print_dups() noexcept -> void;
   auto find_dups() noexcept -> void;
+  auto print_dups() noexcept -> void;
+  auto export_dups(const char *filename) -> void;
   dff& operator=(const dff&) = delete;
 
 private:
