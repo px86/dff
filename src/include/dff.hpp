@@ -4,6 +4,16 @@
 #include <forward_list>
 #include <string>
 #include <unordered_map>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <queue>
+#include <vector>
+
+
+#define RED "\x1b[31m"
+#define GREEN "\x1b[32m"
+#define RESET "\x1b[m"
 
 namespace pr {
 
@@ -30,16 +40,22 @@ private:
 class dff {
 public:
   dff() = delete;
-  dff(const dff&) = default;
+  dff(const dff&) = delete;
   dff(const char *rootdir, bool follow_symlinks);
-  void print_dups() noexcept;
-  bool find_dups() noexcept;
-  dff& operator=(const dff&) = default;
+  auto print_dups() noexcept -> void;
+  auto find_dups() noexcept -> void;
+  dff& operator=(const dff&) = delete;
 
 private:
   const char *m_rootdir {nullptr};
   bool m_follow_symlinks {false};
   Store m_store {};
+  std::mutex m_mutex{};
+  std::condition_variable m_cv{};
+  std::queue<fs::path> m_tasks{};
+  std::vector<std::thread> m_threads{};
+  bool m_finished{false};
+  auto pick_and_execute() -> void;
 };
 
 } // namespace pr
