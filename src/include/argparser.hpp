@@ -61,9 +61,11 @@ struct Option {
   func accept_value = nullptr;
 
   Option() = default;
+  Option(const Option &) = default;
   Option(bool rv, const char *help, const char *lname, char sname, func f)
       : requires_value(rv), help_message(help), long_name(lname),
         short_name(sname), accept_value(f) {}
+  Option& operator=(const Option&) = default;
 };
 
 struct Argument {
@@ -72,15 +74,20 @@ struct Argument {
   func accept_value = nullptr;
 
   Argument() = default;
+  Argument(const Argument&) = default;
   Argument(const char *help, const char *name, func f)
     : help_message(help), name(name), accept_value(f) {}
+  Argument& operator=(const Argument&) = default;
 };
 
 
 class ArgParser {
 public:
+  ArgParser() = delete;
+  ArgParser(const ArgParser&) = default;
   ArgParser(const char *program_name)
-    : m_program_name(program_name) {
+    : m_options({}), m_positional_arguments({}), m_program_name(program_name)
+  {
     // Add the help option implicitely.
     m_options.push_back(Option(false, "Print this help message", "help", '\0',
                                [this](const char *) {
@@ -88,6 +95,7 @@ public:
                                  std::exit(EXIT_SUCCESS);
                                }));
   }
+  ArgParser& operator=(const ArgParser&) = default;
   void parse(const int argc, char **argv);
 
   void add_option(Option &&);

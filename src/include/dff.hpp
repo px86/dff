@@ -24,20 +24,22 @@ public:
 
 private:
   std::size_t m_size = 0;
-  std::forward_list<fs::path> m_files;
+  std::forward_list<fs::path> m_files {};
 };
 
 class dff {
 public:
   dff() = delete;
+  dff(const dff&) = default;
   dff(const char *rootdir, bool follow_symlinks);
   void print_dups() noexcept;
   bool find_dups() noexcept;
+  dff& operator=(const dff&) = default;
 
 private:
-  const char *m_rootdir;
-  bool m_follow_symlinks;
-  Store m_store;
+  const char *m_rootdir {nullptr};
+  bool m_follow_symlinks {false};
+  Store m_store {};
 };
 
 } // namespace pr
