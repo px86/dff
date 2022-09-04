@@ -17,7 +17,7 @@ public:
   auto get_str() -> std::string;
 
 private:
-  std::array<std::uint8_t, 64> m_block;
+  std::array<std::uint8_t, 64> m_block {};
   int m_block_pos = 0;
 
   std::uint64_t m_cummulative_bitlen = 0;
