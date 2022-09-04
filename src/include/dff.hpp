@@ -1,14 +1,31 @@
 #pragma once
 
 #include <filesystem>
+#include <forward_list>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
 namespace pr {
 
+class Record;
+class dff;
+
 namespace fs = std::filesystem;
-using Store = std::unordered_map<std::string, std::vector<fs::path>>;
+using Store = std::unordered_map<std::string, Record>;
+
+class Record {
+public:
+  Record() = default;
+  Record(Record &&rec);
+  auto size() const -> std::size_t;
+  void insert(fs::path path);
+  auto begin() const -> std::forward_list<fs::path>::const_iterator;
+  auto end() const -> std::forward_list<fs::path>::const_iterator;
+
+private:
+  std::size_t m_size = 0;
+  std::forward_list<fs::path> m_files;
+};
 
 class dff {
 public:
